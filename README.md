@@ -1,1 +1,1 @@
-# api-quiz
+# quiz-app
