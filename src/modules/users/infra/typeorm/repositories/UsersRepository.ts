@@ -43,8 +43,8 @@ export default class UsersRepository implements IUsersRepository {
     return user;
   }
 
-  public async save(userData: ICreateUserDTO): Promise<User> {
-    throw new Error("Method not implemented.");
+  public async save(userData: User): Promise<User> {
+    return await this.ormRepository.save(userData);
   }
 
   public async delete(id: string): Promise<void> {
