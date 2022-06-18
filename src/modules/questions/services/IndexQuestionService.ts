@@ -13,10 +13,12 @@ export default class IndexQuestionService {
   public async execute(id: string) : Promise<Question>{
     const question = await this.questionsRepository.findById(id);
 
+
     if(!question){
       throw new AppError('Question not found');
     }
 
+    console.log(question.created_by);
     return question;
   }
 }
