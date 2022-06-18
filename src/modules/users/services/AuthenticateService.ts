@@ -1,9 +1,17 @@
 import AppError from "@shared/errors/AppError";
 import { compare, hash } from "bcryptjs";
+import { sign } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
 import ICreateSessionsDTO from "../dtos/ICreateSessionsDTO";
 import User from "../infra/typeorm/entities/User";
 import IUsersRepository from "../repositories/IUsersRepository";
+import authConfig from '@config/auth';
+
+interface Response {
+  user: User;
+
+  token: string;
+}
 
 @injectable()
 export default class AuthenticateService {
@@ -12,7 +20,7 @@ export default class AuthenticateService {
     private userRepository: IUsersRepository,
   ){}
 
-  public async execute({ email, password }: ICreateSessionsDTO): Promise<User>{
+  public async execute({ email, password }: ICreateSessionsDTO): Promise<Response>{
     const user = await this.userRepository.findByEmail(email);
 
     if(!user){
@@ -27,6 +35,11 @@ export default class AuthenticateService {
       throw new AppError('Email or password incorrect');
     }
 
-    return user;
+    const token = sign({}, authConfig.jwt.secret, {
+      subject: user.id,
+      expiresIn: authConfig.jwt.expiresIn,
+    });
+
+    return { user, token};
   }
 }

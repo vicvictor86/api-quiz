@@ -9,6 +9,6 @@ usersRouter.post('/', usersController.create);
 usersRouter.get('/', usersController.show);
 usersRouter.get('/:id', usersController.index);
 // usersRouter.get('/:id', usersController.update);
-usersRouter.delete('/:id', usersController.delete);
+// usersRouter.delete('/:id', usersController.delete);
 
 export default usersRouter;
