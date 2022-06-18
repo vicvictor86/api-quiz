@@ -12,8 +12,6 @@ interface TokenPayload {
 export default function ensureAuthenticate(request: Request, response: Response, next: NextFunction): void {
   const authHeader = request.headers.authorization;
 
-  console.log("tested")
-
   if(!authHeader){
     throw new AppError('JSONWebToken required');
   }
