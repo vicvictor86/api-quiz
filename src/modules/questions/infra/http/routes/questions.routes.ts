@@ -3,13 +3,12 @@ import { Router } from 'express';
 import QuestionsController from '../controllers/QuestionsController';
 
 const questionsRouter = Router();
-questionsRouter.use(ensureAuthenticate);
 
 const questionsController = new QuestionsController();
 
-questionsRouter.post('/', questionsController.create);
+questionsRouter.post('/', ensureAuthenticate, questionsController.create);
 questionsRouter.get('/', questionsController.show);
 questionsRouter.get('/:id', questionsController.index);
-questionsRouter.delete('/:id', questionsController.delete);
+questionsRouter.delete('/:id', ensureAuthenticate, questionsController.delete);
 
 export default questionsRouter;
