@@ -28,7 +28,7 @@ export default class CreateAlternativeService {
     }
 
     if(!question){
-      throw new AppError('Question already exists');
+      throw new AppError('Question not found');
     }
 
     if(question.created_by.id !== user_id){
@@ -37,12 +37,10 @@ export default class CreateAlternativeService {
 
     const alternative = await this.alternativesRepository.create({ question_id, correct_alternative, choice });
 
-    const alternativeWithEagerLoaded = await this.alternativesRepository.findById(alternative.id);
-
-    if(!alternativeWithEagerLoaded){
+    if(!alternative){
       throw new AppError('Alternative already exists');
     }
 
-    return alternativeWithEagerLoaded;
+    return alternative;
   }
 }

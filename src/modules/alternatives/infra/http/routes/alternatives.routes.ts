@@ -8,5 +8,6 @@ const alternativesController = new AlternativesController();
 alternativesRouter.post('/', ensureAuthenticate, alternativesController.create);
 alternativesRouter.get('/', alternativesController.show);
 alternativesRouter.get('/:id', alternativesController.index);
+alternativesRouter.delete('/:id', ensureAuthenticate, alternativesController.delete);
 
 export default alternativesRouter;

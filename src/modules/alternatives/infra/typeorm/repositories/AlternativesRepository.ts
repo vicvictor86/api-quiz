@@ -43,7 +43,13 @@ export default class AlternativeRepository implements IAlternativesRepository {
 
     await this.ormRepository.save(alternative);
 
-    return alternative;
+    const alternativeWithEagerLoaded = await this.ormRepository.findOneOrFail({
+      where: {
+        id: alternative.id,
+      }
+    });
+
+    return alternativeWithEagerLoaded;
   }
 
   public async delete(id: string): Promise<void> {

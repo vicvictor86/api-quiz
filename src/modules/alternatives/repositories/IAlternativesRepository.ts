@@ -2,7 +2,7 @@ import ICreateAlternativeDTO from "../dtos/ICreateAlternativeDTO";
 import IFindAlternativeDTO from "../dtos/IFindAlternativeDTO";
 import Alternative from "../infra/typeorm/entities/Alternative";
 
-export default interface IQuestionsRepository {
+export default interface IAlternativesRepository {
   findAll(): Promise<Alternative[] | undefined>;
   findById(id: string): Promise<Alternative | undefined>;
   find(alternativeData: IFindAlternativeDTO): Promise<Alternative | undefined>;

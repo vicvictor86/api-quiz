@@ -1,4 +1,5 @@
 import CreateAlternativeService from "@modules/alternatives/services/CreateAlternativeService";
+import DeleteAlternativeService from "@modules/alternatives/services/DeleteAlternativeService";
 import IndexAlternativeService from "@modules/alternatives/services/IndexAlternativeService";
 import ShowAlternativeService from "@modules/alternatives/services/ShowAlternativeService";
 import { instanceToInstance } from "class-transformer";
@@ -33,5 +34,16 @@ export default class AlternativesController {
     const alternative = await indexAlternativeService.execute(id);
 
     return response.status(200).json(instanceToInstance(alternative));
+  }
+
+  public async delete(request: Request, response: Response): Promise<Response> {
+    const alternativeId = request.params.id;
+    const userId = request.user.id;
+
+    const deleteAlternativeService = container.resolve(DeleteAlternativeService);
+
+    await deleteAlternativeService.execute({alternativeId, userId});
+
+    return response.status(200).json();
   }
 }

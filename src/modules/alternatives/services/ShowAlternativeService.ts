@@ -1,6 +1,4 @@
-import AppError from "@shared/errors/AppError";
 import { inject, injectable } from "tsyringe";
-import ICreateAlternativeDto from "../dtos/ICreateAlternativeDTO";
 import Alternative from "../infra/typeorm/entities/Alternative";
 import IAlternativesRepository from "../repositories/IAlternativesRepository";
 
