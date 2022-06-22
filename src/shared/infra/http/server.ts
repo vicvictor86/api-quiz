@@ -10,9 +10,12 @@ import AppError from '@shared/errors/AppError'
 import '@shared/infra/typeorm';
 import '@shared/container';
 
+import uploadConfig from '@config/upload';
+
 const app = express();
 
 app.use(express.json());
+app.use('/files', express.static(uploadConfig.directory));
 app.use(routes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
@@ -23,6 +26,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
         });
     }
 
+    console.log(err.stack);
     console.log(err.message);
 
     return res.status(500).json({

@@ -1,4 +1,5 @@
 import AppError from "@shared/errors/AppError";
+import { hash } from "bcryptjs";
 import { inject, injectable } from "tsyringe";
 import ICreateUserDTO from "../dtos/ICreateUserDTO";
 import User from "../infra/typeorm/entities/User";
@@ -18,10 +19,12 @@ export default class CreateUserService {
       throw new AppError('Email already exists');
     }
 
+    const hashedPassword = await hash(password, 8);
+
     const user = await this.usersRepository.create({
       name,
       email,
-      password
+      password: hashedPassword,
     });
 
     return user;
