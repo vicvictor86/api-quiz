@@ -2,19 +2,20 @@ import { getRepository, Repository } from "typeorm";
 import Alternative from "../entities/Alternative";
 import IAlternativesRepository from "@modules/alternatives/repositories/IAlternativesRepository"
 import ICreateAlternativeDTO from "@modules/alternatives/dtos/ICreateAlternativeDTO";
-import IFindAlternativeDto from "@modules/alternatives/dtos/IFindAlternativeDTO";
+import IUpdateAlternativeDTO from "@modules/alternatives/dtos/IUpdateAlternativeDTO";
+import IFindAlternativeWithQuestionIDDTO from "@modules/alternatives/dtos/IFindAlternativeWithQuestionIDDTO";
 import UserQuestionAnswers from "@modules/users/infra/typeorm/entities/UserQuestionAnswers";
 
 export default class AlternativeRepository implements IAlternativesRepository {
   private ormRepository: Repository<Alternative>;
   private userQuestionsAnswers: Repository<UserQuestionAnswers>;
 
-  constructor(){
+  constructor() {
     this.ormRepository = getRepository(Alternative);
     this.userQuestionsAnswers = getRepository(UserQuestionAnswers);
   }
 
-  public async find({ question_id, choice }: IFindAlternativeDto): Promise<Alternative | undefined> {
+  public async find({ question_id, choice }: IFindAlternativeWithQuestionIDDTO): Promise<Alternative | undefined> {
     const alternative = await this.ormRepository.findOne({
       where: {
         question_id,
@@ -43,13 +44,13 @@ export default class AlternativeRepository implements IAlternativesRepository {
 
   public async create(alternativeData: ICreateAlternativeDTO): Promise<Alternative> {
     const alternative = this.ormRepository.create(
-        {
-          question_id: alternativeData.question.id,
-          choice: alternativeData.choice,
-          correct_alternative: alternativeData.correct_alternative,
-        }
+      {
+        question_id: alternativeData.question.id,
+        choice: alternativeData.choice,
+        correct_alternative: alternativeData.correct_alternative,
+      }
 
-      );
+    );
 
     await this.ormRepository.save(alternative);
 
@@ -69,6 +70,24 @@ export default class AlternativeRepository implements IAlternativesRepository {
     await this.userQuestionsAnswers.save(user_questions_answers);
 
     return alternativeWithEagerLoaded;
+  }
+
+  public async update(alternativeData: IUpdateAlternativeDTO): Promise<Alternative> {
+    const alternativeToUpdate = await this.ormRepository.findOne({
+      where: {
+        id: alternativeData.alternative_id,
+      }
+    });
+
+    const updatedAlternative = {
+      ...alternativeToUpdate,
+      ...(alternativeData.choice && { choice: alternativeData.choice }),
+      ...(alternativeData.correct_alternative && { correct_alternative: alternativeData.correct_alternative }),
+    } as Alternative;
+
+    await this.ormRepository.save(updatedAlternative)
+
+    return updatedAlternative;
   }
 
   public async delete(id: string): Promise<void> {
