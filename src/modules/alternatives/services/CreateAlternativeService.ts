@@ -1,12 +1,14 @@
 import AppError from "@shared/errors/AppError";
 import { inject, injectable } from "tsyringe";
-import ICreateAlternativeDto from "../dtos/ICreateAlternativeDTO";
 import Alternative from "../infra/typeorm/entities/Alternative";
 import IQuestionsRepository from "@modules/questions/repositories/IQuestionsRepository";
 import IAlternativesRepository from "../repositories/IAlternativesRepository";
 
-interface Request extends ICreateAlternativeDto {
+interface Request {
   user_id: string;
+  question_id: string;
+  choice: string;
+  correct_alternative: boolean;
 }
 
 @injectable()
@@ -35,11 +37,9 @@ export default class CreateAlternativeService {
       throw new AppError('User must be the creator of question to add alternative');
     }
 
-    const alternative = await this.alternativesRepository.create({ question_id, correct_alternative, choice });
+    const alternative = await this.alternativesRepository.create({ question, correct_alternative, choice });
 
-    if(!alternative){
-      throw new AppError('Alternative already exists');
-    }
+    console.log(alternative);
 
     return alternative;
   }

@@ -1,6 +1,7 @@
 import Question from '@modules/questions/infra/typeorm/entities/Questions';
+import UserQuestionAnswers from '@modules/users/infra/typeorm/entities/UserQuestionAnswers';
 import { Exclude, Expose } from 'class-transformer';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 
 @Entity('alternatives')
 class Alternative {
@@ -20,6 +21,9 @@ class Alternative {
 
   @Column()
   correct_alternative: boolean;
+
+  @OneToMany(() => UserQuestionAnswers, user_questions_answers => user_questions_answers.alternative, {cascade: true})
+  user_questions_answers: UserQuestionAnswers[];
 
   @CreateDateColumn()
   created_at: Date;

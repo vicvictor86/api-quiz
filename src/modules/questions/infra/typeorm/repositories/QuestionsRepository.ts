@@ -15,6 +15,7 @@ export default class QuestionsRepository implements IQuestionsRepository {
 
     return questions;
   }
+
   public async findById(id: string): Promise<Question | undefined> {
     const questions = await this.ormRepository.findOne({
       where: {
@@ -24,6 +25,7 @@ export default class QuestionsRepository implements IQuestionsRepository {
 
     return questions;
   }
+
   public async create(questionData: ICreateQuestionDTO): Promise<Question> {
     const question = this.ormRepository.create(questionData);
 
@@ -31,6 +33,7 @@ export default class QuestionsRepository implements IQuestionsRepository {
 
     return question;
   }
+
   public async delete(id: string): Promise<void> {
     await this.ormRepository.delete(id);
   }

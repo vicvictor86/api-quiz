@@ -3,12 +3,15 @@ import Alternative from "../entities/Alternative";
 import IAlternativesRepository from "@modules/alternatives/repositories/IAlternativesRepository"
 import ICreateAlternativeDTO from "@modules/alternatives/dtos/ICreateAlternativeDTO";
 import IFindAlternativeDto from "@modules/alternatives/dtos/IFindAlternativeDTO";
+import UserQuestionAnswers from "@modules/users/infra/typeorm/entities/UserQuestionAnswers";
 
 export default class AlternativeRepository implements IAlternativesRepository {
   private ormRepository: Repository<Alternative>;
+  private userQuestionsAnswers: Repository<UserQuestionAnswers>;
 
   constructor(){
     this.ormRepository = getRepository(Alternative);
+    this.userQuestionsAnswers = getRepository(UserQuestionAnswers);
   }
 
   public async find({ question_id, choice }: IFindAlternativeDto): Promise<Alternative | undefined> {
@@ -39,7 +42,14 @@ export default class AlternativeRepository implements IAlternativesRepository {
   }
 
   public async create(alternativeData: ICreateAlternativeDTO): Promise<Alternative> {
-    const alternative = this.ormRepository.create(alternativeData);
+    const alternative = this.ormRepository.create(
+        {
+          question_id: alternativeData.question.id,
+          choice: alternativeData.choice,
+          correct_alternative: alternativeData.correct_alternative,
+        }
+
+      );
 
     await this.ormRepository.save(alternative);
 
@@ -48,6 +58,15 @@ export default class AlternativeRepository implements IAlternativesRepository {
         id: alternative.id,
       }
     });
+
+    const user_questions_answers = this.userQuestionsAnswers.create({
+      user_id: alternativeData.question.created_by.id,
+      question_id: alternativeData.question.id,
+      alternative_id: alternativeWithEagerLoaded.id,
+      is_right: alternativeData.correct_alternative,
+    });
+
+    await this.userQuestionsAnswers.save(user_questions_answers);
 
     return alternativeWithEagerLoaded;
   }

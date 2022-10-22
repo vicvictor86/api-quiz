@@ -12,7 +12,6 @@ export default class AlternativesController {
     const user_id = request.user.id;
 
     const createAlternativeService = container.resolve(CreateAlternativeService);
-
     const alternative = await createAlternativeService.execute({question_id, choice, correct_alternative, user_id});
 
     return response.status(200).json(instanceToInstance(alternative));
