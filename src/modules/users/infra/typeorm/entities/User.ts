@@ -1,5 +1,6 @@
 import { Exclude, Expose } from 'class-transformer';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import UserQuestionAnswers from './UserQuestionAnswers';
 
 @Entity('users')
 class User {
@@ -19,6 +20,9 @@ class User {
   @Column({type: 'varchar', nullable: true})
   @Exclude()
   avatar: string | undefined;
+
+  @OneToMany(() => UserQuestionAnswers, user_questions_answers => user_questions_answers.user)
+  user_questions_answers: UserQuestionAnswers[];
 
   @CreateDateColumn()
   created_at: Date;

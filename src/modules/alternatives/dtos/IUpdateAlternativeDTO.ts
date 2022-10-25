@@ -1,7 +1,5 @@
-import Question from "@modules/questions/infra/typeorm/entities/Questions";
-
 export default interface ICreateAlternativeDTO {
-  question: Question;
+  alternative_id: string;
 
   choice: string;
 

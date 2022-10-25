@@ -8,11 +8,11 @@ import { container } from "tsyringe";
 export default class QuestionsController {
   public async create(request: Request, response: Response): Promise<Response>{
     const { enunciate, is_active } = request.body;
-    const userId = request.user.id;
+    const user_id = request.user.id;
 
     const createQuestionService = container.resolve(CreateQuestionService);
 
-    const question = await createQuestionService.execute({ userId, enunciate, is_active });
+    const question = await createQuestionService.execute({ user_id, enunciate, is_active });
 
     return response.status(200).json(question);
   }
