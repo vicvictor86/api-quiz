@@ -3,7 +3,7 @@ import Alternative from "../entities/Alternative";
 import IAlternativesRepository from "@modules/alternatives/repositories/IAlternativesRepository"
 import ICreateAlternativeDTO from "@modules/alternatives/dtos/ICreateAlternativeDTO";
 import IUpdateAlternativeDTO from "@modules/alternatives/dtos/IUpdateAlternativeDTO";
-import IFindAlternativeWithQuestionIDDTO from "@modules/alternatives/dtos/IFindAlternativeWithQuestionIDDTO";
+import IFindAlternativeWithQuestionIdDTO from "@modules/alternatives/dtos/IFindAlternativeWithQuestionIdDTO";
 import UserQuestionAnswers from "@modules/users/infra/typeorm/entities/UserQuestionAnswers";
 
 export default class AlternativeRepository implements IAlternativesRepository {
@@ -15,7 +15,7 @@ export default class AlternativeRepository implements IAlternativesRepository {
     this.userQuestionsAnswers = getRepository(UserQuestionAnswers);
   }
 
-  public async find({ question_id, choice }: IFindAlternativeWithQuestionIDDTO): Promise<Alternative | undefined> {
+  public async find({ question_id, choice }: IFindAlternativeWithQuestionIdDTO): Promise<Alternative | undefined> {
     const alternative = await this.ormRepository.findOne({
       where: {
         question_id,
@@ -60,14 +60,15 @@ export default class AlternativeRepository implements IAlternativesRepository {
       }
     });
 
-    const user_questions_answers = this.userQuestionsAnswers.create({
-      user_id: alternativeData.question.created_by.id,
-      question_id: alternativeData.question.id,
-      alternative_id: alternativeWithEagerLoaded.id,
-      is_right: alternativeData.correct_alternative,
-    });
+    //Tirar dps
+    // const user_questions_answers = this.userQuestionsAnswers.create({
+    //   user_id: alternativeData.question.created_by.id,
+    //   question_id: alternativeData.question.id,
+    //   alternative_id: alternativeWithEagerLoaded.id,
+    //   is_right: alternativeData.correct_alternative,
+    // });
 
-    await this.userQuestionsAnswers.save(user_questions_answers);
+    // await this.userQuestionsAnswers.save(user_questions_answers);
 
     return alternativeWithEagerLoaded;
   }

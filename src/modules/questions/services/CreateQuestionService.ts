@@ -9,10 +9,10 @@ export default class CreateQuestionService {
     private questionsRepository: IQuestionsRepository,
   ){}
 
-  public async execute({userId, enunciate, is_active}: ICreateQuestionDTO){
+  public async execute({user_id, enunciate, is_active}: ICreateQuestionDTO){
     const question = await this.questionsRepository.create(
       {
-        userId,
+        user_id,
         enunciate,
         is_active,
       }

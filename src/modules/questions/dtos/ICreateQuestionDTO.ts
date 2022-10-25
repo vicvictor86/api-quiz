@@ -1,5 +1,5 @@
 export default interface ICreateQuestionDTO {
-  userId: string;
+  user_id: string;
 
   enunciate: string;
 
