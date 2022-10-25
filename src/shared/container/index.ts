@@ -10,7 +10,7 @@ import IAlternativesRepository from "@modules/alternatives/repositories/IAlterna
 import AlternativesRepository from "@modules/alternatives/infra/typeorm/repositories/AlternativesRepository";
 
 import IUserQuestionAnswersRepository from "@modules/users/repositories/IUserQuestionAnswersRepository";
-import UserQuestionAnswersRepository from "@modules/users/infra/typeorm/repositories/UserQuestionAnserwersRepository";
+import UserQuestionAnswersRepository from "@modules/users/infra/typeorm/repositories/UserQuestionAnsrwersRepository";
 
 container.registerSingleton<IUsersRepository>('UsersRepository', UsersRepository);
 

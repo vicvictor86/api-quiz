@@ -11,17 +11,6 @@ export default class UserQuestionAnswersRepository implements IUserQuestionAnswe
     this.ormRepository = getRepository(UserQuestionAnswers);
   }
 
-  public async find(user_id: string, question_id: string): Promise<UserQuestionAnswers | undefined> {
-    const answer = await this.ormRepository.findOne({
-      where: {
-        user_id,
-        question_id,
-      }
-    });
-
-    return answer;
-  }
-
   public async create(answerData: ICreateUserQuestionAnswersDTO): Promise<UserQuestionAnswers> {
     const answer = this.ormRepository.create(answerData);
 
@@ -30,8 +19,13 @@ export default class UserQuestionAnswersRepository implements IUserQuestionAnswe
     return answer;
   }
 
-  public async findAll(): Promise<UserQuestionAnswers[] | undefined> {
-    const answer = await this.ormRepository.find();
+  public async find(user_id: string, question_id: string): Promise<UserQuestionAnswers | undefined> {
+    const answer = await this.ormRepository.findOne({
+      where: {
+        user_id,
+        question_id,
+      }
+    });
 
     return answer;
   }
@@ -45,6 +39,43 @@ export default class UserQuestionAnswersRepository implements IUserQuestionAnswe
 
     return answer;
   }
+
+  public async findByUserId(user_id: string): Promise<UserQuestionAnswers[] | undefined> {
+    const answer = await this.ormRepository.find({
+      where: {
+        user_id,
+      }
+    });
+
+    return answer;
+  }
+
+  public async findByQuestionId(question_id: string): Promise<UserQuestionAnswers[] | undefined> {
+    const answer = await this.ormRepository.find({
+      where: {
+        question_id,
+      }
+    });
+
+    return answer;
+  }
+
+  public async findByAlternativeId(alternative_id: string): Promise<UserQuestionAnswers[] | undefined> {
+    const answer = await this.ormRepository.find({
+      where: {
+        alternative_id,
+      }
+    });
+
+    return answer;
+  }
+
+  public async findAll(): Promise<UserQuestionAnswers[] | undefined> {
+    const answer = await this.ormRepository.find();
+
+    return answer;
+  }
+
 
   public async save(answerData: UserQuestionAnswers): Promise<UserQuestionAnswers> {
     return await this.ormRepository.save(answerData);
